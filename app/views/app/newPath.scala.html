@@ -1,0 +1,96 @@
+@main("Новый путь") {
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">Карта для нового пути</h3>
+      </div>
+      <div class="box-body no-padding" id="map" style="height: 600px;"></div>          
+    </div>
+  </div>
+</div>
+<div class="row">
+  <form id="link-form">
+    <div class="form-group">
+      <label for="link-input">Link</label>
+      <input type="text" class="form-control" id="link-input" placeholder="link">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>	
+} {
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script type="text/javascript">
+  ymaps.ready(init);
+  var myMap;
+  var line;
+  var startPoint;
+  var path = [];
+  
+  function init(){     
+    myMap = new ymaps.Map("map", {
+      center: [55.941874, 37.26290],
+      zoom: 17
+    });
+    myMap.cursors.push('crosshair');
+    
+    line = new ymaps.Polyline(path, {
+      hintContent: "Polyline"
+    }, {
+	  strokeColor: '#a05ed5b0',
+	  strokeWidth: 4
+    });
+    myMap.geoObjects.add(line);
+    
+    myMap.events.add('click', function (e) {
+      var coords = e.get('coords');
+      path.push(coords);
+      if(startPoint == null) {
+      	startPoint = new ymaps.GeoObject({
+      	  geometry: {
+      	    type: "Point",
+      	    coordinates: coords
+      	  }
+      	});	
+      	myMap.geoObjects.add(startPoint); 
+      }
+      line.geometry.setCoordinates(path);
+    });
+    
+  }	
+  
+  $('#link-form').submit(function(e) {
+    event.preventDefault();
+    if(line == null) {
+      alert("You should enter path on map before save path");
+    } else if(line.geometry.getCoordinates().length < 2){
+      alert("Path should have one segment (two points) at least");
+    } else if($("#link-input").val() == "") {
+      alert("You should enter YouTube link to video");
+    } else {
+      $.ajax({
+        url: '@routes.AppController.newPath',
+        type: 'POST',
+        dataType: "json",        
+        contentType: "application/json; charset=utf-8",
+        error: function(data) {
+          alert(data.descr);	
+        },
+        success: function(data) {
+          myMap.geoObjects.remove(startPoint);
+          startPoint = null;
+          path = [];
+          line.geometry.setCoordinates(path);
+          $("#link-input").val("");
+          alert(data.descr);
+        },
+        data: JSON.stringify({ 
+          link: $("#link-input").val(),
+    	  points: line.geometry.getCoordinates()
+        })
+      });
+    }
+  })
+  
+</script>  
+}

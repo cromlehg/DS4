@@ -1,0 +1,4 @@
+@(users: Seq[models.User])(implicit user: models.User)
+@views.html.admin.defaultCommonDashboard(Array("Пользователи", "Список")) {
+  @usersListTable(users)
+}

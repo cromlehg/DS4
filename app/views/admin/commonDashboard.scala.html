@@ -1,0 +1,11 @@
+@(activeMenu: Array[String])(incontent: Html)(bodyEnd: Html)(head: Html)(implicit user : models.User) 
+
+@main(activeMenu(0)) {
+  @header.header()
+  @sidebar.sidebar(activeMenu)
+  @content.content(activeMenu) {
+    @incontent
+  }
+  @footer.footer()    
+  @ctrlsidebar.sidebar()
+}(bodyEnd)(head)

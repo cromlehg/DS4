@@ -1,0 +1,16 @@
+@(activeMenu: Array[String], menuName: String, icon: String, submenu: Map[String, Call])
+
+<li@if(activeMenu(0) == menuName) { class="treeview active" } else { class="treeview" }>
+  <a href="#">
+    <i class="fa @icon"></i>
+    <span>@menuName</span>
+    <i class="fa fa-angle-left pull-right"></i>
+  </a>
+  <ul class="treeview-menu">
+    @for((childMenuName, menuCall) <- submenu) {
+    <li@if(activeMenu.length>1 && activeMenu(1) == childMenuName) { class="active" }>
+      <a href="@menuCall">@childMenuName</a>
+    </li>
+    }
+  </ul>
+</li>

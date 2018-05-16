@@ -1,0 +1,8 @@
+@(activeMenu: Array[String], menuName: String, icon: String, call: Call)
+
+<li@if(activeMenu(0) == menuName) { class="active" }>
+  <a href="@call">
+    <i class="fa @icon"></i>
+    <span>@menuName</span>
+  </a>
+</li>

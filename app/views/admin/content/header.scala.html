@@ -1,0 +1,9 @@
+@(activeMenu: Array[String], description: String = "")
+
+<section class="content-header">
+  <h1>
+    @activeMenu.last
+    <small>@description</small>
+  </h1>
+  @breadcrumb(activeMenu)
+</section>

@@ -1,0 +1,66 @@
+@(ps: Seq[Path])
+@main("Пути") {
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">Карта</h3>
+      </div>
+      <div class="box-body no-padding" id="map" style="height: 600px;"></div>
+      <div class="box-body no-padding" id="video-panel"></div>            
+    </div>
+  </div>
+</div>
+<div class="row" id="route_videos">
+  
+</div>	
+}{
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script type="text/javascript">
+  ymaps.ready(init);
+  var myMap;
+ 
+  function init(){     
+    myMap = new ymaps.Map("map", {
+      center: [55.941874, 37.26290],
+      zoom: 17
+    });
+    
+    myMap.cursors.push('arrow');
+     	
+    @for(p <- ps) {
+    var polyline = new ymaps.Polyline([
+      @Html(p.segments.map{ s => "[" + s.startLongitude + ", " + s.startLatitude + "], [" + s.endLongitude + ", " + s.endLatitude + "] "}.mkString(", "))
+    ], {
+      hintContent: "Polyline"
+    }, {
+      strokeColor: '#a05ed5b0',
+      strokeWidth: 4
+    });
+    polyline.events.add('click', function () {
+      $.ajax({
+        url: '@routes.AppController.getVideosForPath(p.id, 1)',
+        success: function(data) {
+          var content = "";
+          data.forEach(function(item, i, data) {
+            content += "<div class='col-lg-3 col-md-4 col-sm-6 col-xs-12'>";
+            content += "<a href='#" + item.link + "' class='thumbnail image-of-video'>";
+            content += "<img src='https://i.ytimg.com/vi/" + item.link + "/hqdefault.jpg' alt='...'>";
+            content += "</div>";
+            content += "</div>";
+          });
+          $('#route_videos').html(content);
+          $('.image-of-video').click(function(e) {
+            $('#video-panel').html("<iframe width='560' height='315' src='https://www.youtube.com/embed/" + e.target.src.substring(23, 34) + "' frameborder='0' allowfullscreen></iframe>");
+          });  
+        }
+      });
+      //e.preventDefault();
+      //e.stopPropagation();      
+    });
+    myMap.geoObjects.add(polyline);
+    }  	
+ 
+  }	
+</script>  
+}

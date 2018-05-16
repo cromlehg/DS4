@@ -1,0 +1,36 @@
+@(users: Seq[models.User])(implicit user: models.User)
+@views.html.admin.common.box("Список пользователей")("table-responsive") {
+<div class="input-group" style="width: 150px;">
+  <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
+  <div class="input-group-btn">
+    <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+  </div>
+</div>	
+} {
+<table class="table table-hover">
+  <tr>
+    <th>ID</th>
+    <th>Email</th>
+    <th>Статус пользователя</th>
+    <th>Статус аккаунта</th>
+    <th>Имя</th>
+    <th>Фамилия</th>
+    <th>Часовой пояс</th>
+    <th>Зарегистрирован</th>
+    <th></th>
+  </tr>
+  @for(u <- users) {
+  <tr>
+    <td>@u.id</td>
+    <td>@u.email</td>
+    <td>@u.userStatus.status</td>
+    <td>@u.accountStatus.status</td>
+    <td>@u.name</td>
+    <td>@u.surname</td>
+    <td>@u.timezone</td>
+    <td>@u.getRegistered(user.timezone.timezone).toString("dd:MM:yy")</td>
+    <td><a href="@controllers.routes.UsersController.profile(u.id)">профиль</a></td>
+  </tr>
+  }
+</table>
+}

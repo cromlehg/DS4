@@ -1,0 +1,118 @@
+This is your new Play application
+=================================
+
+This file will be packaged with your application when using `activator dist`.
+
+There are several demonstration files available in this template.
+
+Controllers
+===========
+
+- HomeController.scala:
+
+  Shows how to handle simple HTTP requests.
+
+- AsyncController.scala:
+
+  Shows how to do asynchronous programming when handling a request.
+
+- CountController.scala:
+
+  Shows how to inject a component into a controller and use the component when
+  handling requests.
+
+Components
+==========
+
+- Module.scala:
+
+  Shows how to use Guice to bind all the components needed by your application.
+
+- Counter.scala:
+
+  An example of a component that contains state, in this case a simple counter.
+
+- ApplicationTimer.scala:
+
+  An example of a component that starts when the application starts and stops
+  when the application stops.
+
+Filters
+=======
+
+- Filters.scala:
+
+  Creates the list of HTTP filters used by your application.
+
+- ExampleFilter.scala
+
+  A simple filter that adds a header to every response.
+  
+  -------------old
+  
+  
+  @(ps: Seq[Segment])
+@main("Пути") {
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">Карта</h3>
+      </div>
+      <div class="box-body no-padding" id="map" style="height: 600px;"></div>
+      <div class="box-body no-padding" id="video-panel"></div>            
+    </div>
+  </div>
+</div>
+<div class="row" id="route_videos">
+  
+</div>	
+}{
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script type="text/javascript">
+  ymaps.ready(init);
+  var myMap;
+ 
+  function init(){     
+    myMap = new ymaps.Map("map", {
+      center: [55.76, 37.64],
+      zoom: 7
+    });
+     	
+  @for(p <- ps) {
+  ymaps.route([[@p.startLongitude, @p.startLatitude], [@p.endLongitude, @p.endLatitude]]).then(
+    function (route) {
+      myMap.geoObjects.add(route);
+      route.events.add('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $.ajax({
+          url: '@routes.AppController.getVideosForPath(p.id, 1)',
+          success: function(data) {
+            var content = "";
+            data.forEach(function(item, i, data) {
+              content += "<div class='col-lg-3 col-md-4 col-sm-6 col-xs-12'>";
+              content += "<a href='#' class='thumbnail image-of-video'>";
+              content += "<img src='https://i.ytimg.com/vi/" + item.link + "/hqdefault.jpg' alt='...'>";
+              content += "</div>";
+              content += "</div>";
+            });
+            $('#route_videos').html(content);
+            $('.image-of-video').click(function(e) {
+              //$('#video-panel').html('<iframe width='560' height='315' src='https://www.youtube.com/embed/" + 1 + "' frameborder='0' allowfullscreen></iframe>');
+            });  
+          }
+        });
+      });
+    },
+    function (error) {
+      alert('Возникла ошибка: ' + error.message);
+    }
+  ); 
+  }   
+  
+  }
+</script>  
+}
+  
+  

@@ -1,0 +1,6 @@
+@(activeMenu: Array[String])
+<ol class="breadcrumb">
+  @for(childMenuName <- activeMenu) {
+    <li>@childMenuName</li>
+  }
+</ol>

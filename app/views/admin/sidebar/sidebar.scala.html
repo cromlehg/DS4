@@ -1,0 +1,9 @@
+@(activeMenu: Array[String])(implicit user : models.User) 
+
+<aside class="main-sidebar">
+  <section class="sidebar">
+	@sidebarUserPanel()
+	@searchForm()
+    @menu.sidebarMenu(activeMenu)
+  </section>
+</aside>

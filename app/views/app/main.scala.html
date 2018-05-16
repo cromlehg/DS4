@@ -1,0 +1,9 @@
+@(activeMenu: String)(content: Html)(afterScripts: Html)
+@html(head()) {   
+  @body {
+  	@menu(activeMenu)
+  	<div class="container">
+  	  @content
+  	</div>
+  } {@afterScripts}
+}

@@ -1,0 +1,40 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# pather 
+
+# as default - pathes map
+GET    /                                              controllers.AppController.index
+
+GET    /pathes/path/:id/videos/list/pages/page/:pid   controllers.AppController.getVideosForPath(id: Long, pid: Int)
+
+GET    /newPath                                       controllers.AppController.newPath()
+
+POST   /newPath                                       controllers.AppController.createNewPath  
+
+
+
+
+# An example controller showing a sample home page
+
+
+GET    /panel                                         controllers.PanelController.panel
+
+GET    /login                                         controllers.PanelController.login
+
+POST   /auth                                          controllers.PanelController.auth
+
+
+# media
+
+GET    /panel/media/list/pages/page/:id               controllers.MediaController.list(id: Long)
+
+# admin users
+
+GET    /panel/users/list/pages/page/:id               controllers.UsersController.list(id: Long)
+
+GET    /panel/user/:id/profile                        controllers.UsersController.profile(id: Long)
+
+# Map static resources from the /public folder to the /assets URL path
+GET    /assets/*file                                  controllers.Assets.versioned(path="/public", file: Asset)

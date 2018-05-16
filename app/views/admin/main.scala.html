@@ -1,0 +1,8 @@
+@(activeMenu: String)(content: Html)(bodyEnd: Html)(head: Html)
+@html(head) {   
+  @body {
+  	<div class="wrapper">
+      @content
+    </div>
+  }(bodyEnd)
+}
